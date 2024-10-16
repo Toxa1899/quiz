@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<!-- <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="telereversbot" data-size="large" data-auth-url="https://honest-aliens-deny.loca.lt/api/v1/user/user/" data-request-access="write"></script> -->
+
+
+<script async src="https://telegram.org/js/telegram-widget.js?22"
+    data-telegram-login="telereversbot"
+    data-size="large"
+    data-auth-url="https://dark-pans-remain.loca.lt/api/v1/user/user/"
+    data-request-access="write"
+    data-onauth="onTelegramAuth">
+</script>
+
+<script>
+  // Функция, вызываемая после авторизации
+  function onTelegramAuth(user) {
+    console.log('Telegram User:', user);
+
+    // Пример: Отправка данных пользователя на сервер через fetch
+    fetch('https://dark-pans-remain.loca.lt/api/v1/user/user/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Ошибка при авторизации');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Успешная авторизация:', data);
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error);
+      });
+  }
+</script>
+
+
+
+</body>
+</html>

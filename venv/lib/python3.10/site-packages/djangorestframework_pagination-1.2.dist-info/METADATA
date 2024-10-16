@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: djangorestframework_pagination
+Version: 1.2
+Summary: response pagination using django restframework
+Home-page: https://github.com/alishekari/djangorestframework_pagination
+Author: Ali Shekari
+Author-email: alishekari1991@outlook.com
+Project-URL: Bug Tracker, https://github.com/alishekari/djangorestframework_pagination/issues
+Classifier: Programming Language :: Python :: 3.10
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.0
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+example:
+
+```
+class TestAPI(APIView):
+
+    @staticmethod
+    def get(request):
+        tests = Test.objects.all() # filter or order by or anything else
+        
+        pagination = PaginationObject(objects=tests, page=1, numbers_in_page=10, 
+                     serializer=TestSerializer)
+
+        return Response(pagination.serializer_data(), status=status.HTTP_200_OK)
+```
+
+to get all objects in one page :
+
+```
+        pagination = PaginationObject(objects=tests, page=1, numbers_in_page=-1, 
+                     serializer=TestSerializer)
+```
