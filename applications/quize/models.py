@@ -48,6 +48,9 @@ class QuizTopic(models.Model):
                                 verbose_name="Внешний ключ на таблицу quiz_quiz (викторина)")
     name = models.CharField(max_length=200, verbose_name='Название темы (например, "Математика", "История")')
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = 'Темы'
         verbose_name_plural = 'Темы'
@@ -59,16 +62,22 @@ class QuizQuestion(models.Model):
     topic = models.ForeignKey(QuizTopic,on_delete=models.CASCADE,
                               verbose_name="Внешний ключ на quiz_topic (Тема вопроса)")
     image = models.ForeignKey(Image, on_delete=models.CASCADE,
-                              verbose_name="Внешний ключ на таблицу image(изображение)")
+                              verbose_name="Внешний ключ на таблицу image(изображение)", blank=True, null=True)
 
 
     class Meta:
         verbose_name = 'Вопросы'
         verbose_name_plural = 'Вопросы'
 
+
+    def __str__(self):
+        return  self.text
+
 class QuizChoice(models.Model):
-    question_id = models.ForeignKey(Quiz, on_delete=models.CASCADE,
-                                    verbose_name='Внешний ключ на quiz_question (вопрос)')
+    question_id = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE,
+                                    verbose_name='Внешний ключ на quiz_question (вопрос)',
+                                    related_name='choices',
+                                    )
     text = models.TextField(verbose_name='Текст ответа')
     is_correct = models.BooleanField(default=False, verbose_name="Является ли ответ правильным")
     image = models.ForeignKey(Image, on_delete=models.CASCADE ,
@@ -77,6 +86,9 @@ class QuizChoice(models.Model):
     class Meta:
         verbose_name = 'Варианты ответа'
         verbose_name_plural = 'Варианты ответа'
+
+    def __str__(self):
+        return  self.text
 
 
 class QuizResult(models.Model):

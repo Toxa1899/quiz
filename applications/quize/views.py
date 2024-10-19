@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import (AllowAny, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
-
+from django_filters.rest_framework import DjangoFilterBackend
 from applications.quize.models import (Quiz, QuizChoice, QuizQuestion,
                                        QuizResult, QuizTopic)
 from applications.quize.serializers import (QuizChoiceSerializer,
@@ -16,15 +16,23 @@ from applications.quize.serializers import (QuizChoiceSerializer,
 class QuizeModelViewSet(viewsets.ModelViewSet):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-    # permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['language']
 
-    # def list(self, request, *args, **kwargs):
-    #     queryset = Quiz.objects.all()
-    #     serializer = QuizSerializer(queryset, many=True)
-    #
-    #     return  Response(serializer.data)
-    #
 
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # language = self.request.query_params.get('language')
+        quiz_type = self.request.query_params.get('type')
+
+        # if language:
+        #     queryset = queryset.filter(language=language)
+
+        if quiz_type:
+            queryset = queryset.filter(type__name=quiz_type)
+
+        return queryset
 
 
 class QuizeQuestionModelViewSet(viewsets.ModelViewSet):

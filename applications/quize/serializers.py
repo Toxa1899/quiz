@@ -33,7 +33,23 @@ class ImageSerializerMixin(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+
+
+class QuizChoiceSerializer(ImageSerializerMixin):
+    class Meta:
+        model = QuizChoice
+        fields = '__all__'
+
+class QuizQuestionSerializer(ImageSerializerMixin):
+    choices = QuizChoiceSerializer(many=True)
+
+    class Meta:
+        model = QuizQuestion
+        fields = '__all__'
+
 class QuizSerializer(serializers.ModelSerializer):
+    questions = serializers.SerializerMethodField()
+
     type = serializers.CharField(max_length=50, required=True)
     image = QuizImage(read_only=True)
     image_w = serializers.ImageField(write_only=True)
@@ -47,13 +63,26 @@ class QuizSerializer(serializers.ModelSerializer):
             'description',
             'is_published',
             'type',
+            'questions',
             'image',
-            'image_w'
-
-
+            'image_w',
 
         ]
 
+    def get_questions(self, obj):
+        request = self.context.get('request')
+        print()
+
+        pk = self.context['view'].kwargs.get('pk')
+
+
+        if request and request.method == 'GET' and pk is not None:
+            quiz_size = request.GET.get('quiz_size', 10)
+            questions = obj.quizquestion_set.all()[:int(quiz_size)]
+            return QuizQuestionSerializer(questions, many=True).data
+
+
+        return []
 
     def create(self, validated_data):
         quiz_type_name = validated_data.pop('type')
@@ -73,12 +102,6 @@ class QuizSerializer(serializers.ModelSerializer):
 
 
 
-class QuizQuestionSerializer(ImageSerializerMixin):
-
-    class Meta:
-        model = QuizQuestion
-        fields = '__all__'
-
 
 
 
@@ -87,10 +110,7 @@ class QuizTopicSerializer(serializers.ModelSerializer):
         model = QuizTopic
         fields = '__all__'
 
-class QuizChoiceSerializer(ImageSerializerMixin):
-    class Meta:
-        model = QuizChoice
-        fields = '__all__'
+
 
 
 class QuizResultSerializer(serializers.ModelSerializer):
