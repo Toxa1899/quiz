@@ -43,8 +43,9 @@
 
         console.log(userData)
 
+        const currentUrl = window.location.href;
 
-        fetch('https://eb31-185-53-228-200.ngrok-free.app/api/v1/user/user/', {
+        fetch(currentUrl + 'api/v1/user/user/', {
           method: 'POST',
           headers: {
                     'Accept': 'application/json',
