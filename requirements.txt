@@ -16,3 +16,4 @@ django-telegram-login
 black
 isort
 flake8
+gunicorn
