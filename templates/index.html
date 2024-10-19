@@ -34,16 +34,15 @@
         const userData = {
           id: user.id,
           first_name: user.first_name,
-
           username: user.username || '',
           photo_url: user.photo_url || '',
           auth_date : user.auth_date || '',
           hash : user.hash || '',
 
+
         };
 
         console.log(userData)
-
 
         const currentUrl = window.location.origin;
 
@@ -53,7 +52,7 @@
           headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'ngrok-skip-browser-warning': 'true',
+
           },
           body: JSON.stringify(userData),
         })
