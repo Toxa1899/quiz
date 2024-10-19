@@ -29,6 +29,7 @@
 
 
 
+
       function onTelegramAuth(user) {
         const userData = {
           id: user.id,
@@ -43,9 +44,10 @@
 
         console.log(userData)
 
-        const currentUrl = window.location.hostname;
+        const currentUrl = window.location.origin;
 
-        fetch(currentUrl + 'api/v1/user/user/', {
+
+        fetch(currentUrl + '/api/v1/user/user/', {
           method: 'POST',
           headers: {
                     'Accept': 'application/json',

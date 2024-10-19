@@ -21,7 +21,7 @@ def check_telegram_authorization(auth_data):
     check_hash = auth_data.pop("hash", None)
 
     # Генерация строки проверки
-    data_check_arr = [f"{key}={value}" for key, value in auth_data.items()]
+    data_check_arr = [f"{key}={value}" for key, value in auth_data.items() if value]
     data_check_arr.sort()  # Сортировка
     data_check_string = "\n".join(data_check_arr)
 

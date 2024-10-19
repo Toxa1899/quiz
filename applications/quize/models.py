@@ -115,6 +115,7 @@ class QuizChoice(models.Model):
         Image,
         on_delete=models.CASCADE,
         verbose_name="Внешний ключ на quiz_image (изображение) — необязательное поле",
+        blank=True, null=True
     )
 
     class Meta:
