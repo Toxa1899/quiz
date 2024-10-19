@@ -69,19 +69,20 @@ class TelegramLoginView(APIView):
     def get(self, request, *args, **kwargs):
         data_get = request.GET
 
-        data = {
-            "id": data_get["id"],
-            "first_name": data_get["first_name"],
-            "username": data_get["username"],
-            "photo_url": data_get["photo_url"],
-            "auth_date": data_get["auth_date"],
-            "hash": data_get["hash"],
-        }
+        if data_get:
+            data = {
+                "id": data_get["id"],
+                "first_name": data_get["first_name"],
+                "username": data_get["username"],
+                "photo_url": data_get["photo_url"],
+                "auth_date": data_get["auth_date"],
+                "hash": data_get["hash"],
+            }
 
-        tg = check_telegram_authorization(data)
+            tg = check_telegram_authorization(data)
 
-        return Response(tg)
-
+            return Response(tg)
+        return  Response('no Data')
 
 def tg(requests):
     return render(requests, "index.html")
