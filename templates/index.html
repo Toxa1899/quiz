@@ -43,7 +43,7 @@
 
         console.log(userData)
 
-        const currentUrl = window.location.href;
+        const currentUrl = window.location.hostname;
 
         fetch(currentUrl + 'api/v1/user/user/', {
           method: 'POST',
