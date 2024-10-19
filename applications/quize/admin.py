@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from applications.quize.models import Quiz, QuizChoice, QuizQuestion, QuizTopic, QuizType
+from applications.quize.models import (
+    Quiz,
+    QuizChoice,
+    QuizQuestion,
+    QuizTopic,
+    QuizType,
+)
 
 # Register your models here.
 admin.site.register(Quiz)

@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class QuizeConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'applications.quize'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "applications.quize"

@@ -6,11 +6,12 @@ from django.db import models
 class Image(models.Model):
     id = models.AutoField(primary_key=True)
     path = models.ImageField(upload_to="img")
-    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
-    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
+    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата обновления", auto_now=True)
 
     def __str__(self):
-        return  str(self.path)
+        return str(self.path)
+
 
 class CustomUserManager(UserManager):
 
@@ -42,34 +43,28 @@ class CustomUserManager(UserManager):
 
 
 class CustomUser(AbstractUser):
-    language_choices = (
-        ("ru", "ru"),
-        ("kg", "kg"),
-        ("en", "en")
-    )
+    language_choices = (("ru", "ru"), ("kg", "kg"), ("en", "en"))
 
     activation_code = models.CharField(max_length=60, blank=True)
     is_active = models.BooleanField(default=False)
     tg_id = models.IntegerField(unique=True)
-    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
-    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
+    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата обновления", auto_now=True)
     city_or_village = models.CharField(max_length=200, blank=True, null=True)
     school = models.CharField(max_length=100, blank=True, null=True)
     language = models.CharField(choices=language_choices, default="ru", max_length=2)
     avatar = models.ForeignKey(Image, on_delete=models.CASCADE, blank=True, null=True)
     username = models.CharField(max_length=50, blank=True, null=True)
 
-
     objects = CustomUserManager()
-    USERNAME_FIELD = 'tg_id'
+    USERNAME_FIELD = "tg_id"
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f'{self.tg_id}'
+        return f"{self.tg_id}"
 
     def create_activation_code(self):
         import uuid
+
         code = str(uuid.uuid4())
         self.activation_code = code
-
-

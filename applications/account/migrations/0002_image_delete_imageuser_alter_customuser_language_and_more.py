@@ -7,31 +7,55 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0001_initial'),
+        ("account", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('path', models.ImageField(upload_to='media/')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Дата обновления')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("path", models.ImageField(upload_to="media/")),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Дата создания"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, verbose_name="Дата обновления"),
+                ),
             ],
         ),
         migrations.DeleteModel(
-            name='ImageUser',
+            name="ImageUser",
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='language',
-            field=models.CharField(choices=[('ru', 'ru'), ('kg', 'kg'), ('en', 'en')], default='ru', max_length=2),
+            model_name="customuser",
+            name="language",
+            field=models.CharField(
+                choices=[("ru", "ru"), ("kg", "kg"), ("en", "en")],
+                default="ru",
+                max_length=2,
+            ),
         ),
         migrations.AddField(
-            model_name='customuser',
-            name='avatar',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='account.image'),
+            model_name="customuser",
+            name="avatar",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="account.image",
+            ),
             preserve_default=False,
         ),
     ]

@@ -10,68 +10,237 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('account', '0002_image_delete_imageuser_alter_customuser_language_and_more'),
+        ("account", "0002_image_delete_imageuser_alter_customuser_language_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='QuizType',
+            name="QuizType",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=100, null=True, verbose_name='Название типа викторины')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        verbose_name="Название типа викторины",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Quiz',
+            name="Quiz",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=50, verbose_name='Название викторины')),
-                ('description', models.TextField(verbose_name='Описание викторины')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Дата обновления')),
-                ('is_published', models.BooleanField(default=False, verbose_name='Опубликована ли викторина')),
-                ('language', models.CharField(choices=[('ru', 'ru'), ('kg', 'kg'), ('en', 'en')], default='ru', max_length=2, verbose_name='Язык викторины ru , en , kg')),
-                ('image', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='account.image', verbose_name='Внешний ключ на таблицу image(изображение)')),
-                ('type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quize.quiztype', verbose_name='Внешний ключ на таблицу quiz_type (Типы викторин)')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=50, verbose_name="Название викторины"),
+                ),
+                ("description", models.TextField(verbose_name="Описание викторины")),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Дата создания"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, verbose_name="Дата обновления"),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(
+                        default=False, verbose_name="Опубликована ли викторина"
+                    ),
+                ),
+                (
+                    "language",
+                    models.CharField(
+                        choices=[("ru", "ru"), ("kg", "kg"), ("en", "en")],
+                        default="ru",
+                        max_length=2,
+                        verbose_name="Язык викторины ru , en , kg",
+                    ),
+                ),
+                (
+                    "image",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="account.image",
+                        verbose_name="Внешний ключ на таблицу image(изображение)",
+                    ),
+                ),
+                (
+                    "type",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="quize.quiztype",
+                        verbose_name="Внешний ключ на таблицу quiz_type (Типы викторин)",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='QuizChoice',
+            name="QuizChoice",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField(verbose_name='Текст ответа')),
-                ('is_correct', models.BooleanField(default=False, verbose_name='Является ли ответ правильным')),
-                ('image', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='account.image', verbose_name='Внешний ключ на quiz_image (изображение) — необязательное поле')),
-                ('question_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quize.quiz', verbose_name='Внешний ключ на quiz_question (вопрос)')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.TextField(verbose_name="Текст ответа")),
+                (
+                    "is_correct",
+                    models.BooleanField(
+                        default=False, verbose_name="Является ли ответ правильным"
+                    ),
+                ),
+                (
+                    "image",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="account.image",
+                        verbose_name="Внешний ключ на quiz_image (изображение) — необязательное поле",
+                    ),
+                ),
+                (
+                    "question_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="quize.quiz",
+                        verbose_name="Внешний ключ на quiz_question (вопрос)",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='QuizResult',
+            name="QuizResult",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('score', models.IntegerField(verbose_name='Количество набранных баллов')),
-                ('date_taken', models.DateTimeField(auto_now_add=True, verbose_name='Дата прохождения викторины')),
-                ('quiz', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quize.quiz', verbose_name='Внешний ключ на quiz_quiz (викторина)')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Внешний ключ на пользователя')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "score",
+                    models.IntegerField(verbose_name="Количество набранных баллов"),
+                ),
+                (
+                    "date_taken",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Дата прохождения викторины"
+                    ),
+                ),
+                (
+                    "quiz",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="quize.quiz",
+                        verbose_name="Внешний ключ на quiz_quiz (викторина)",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Внешний ключ на пользователя",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='QuizTopic',
+            name="QuizTopic",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Название темы (например, "Математика", "История")')),
-                ('quiz_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quize.quiz', verbose_name='Внешний ключ на таблицу quiz_quiz (викторина)')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=200,
+                        verbose_name='Название темы (например, "Математика", "История")',
+                    ),
+                ),
+                (
+                    "quiz_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="quize.quiz",
+                        verbose_name="Внешний ключ на таблицу quiz_quiz (викторина)",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='QuizQuestion',
+            name="QuizQuestion",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField(verbose_name='Текст вопроса')),
-                ('image', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='account.image', verbose_name='Внешний ключ на таблицу image(изображение)')),
-                ('quiz_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quize.quiz', verbose_name='Внешний ключ на quiz_quiz (викторина)')),
-                ('topic', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quize.quiztopic', verbose_name='Внешний ключ на quiz_topic (Тема вопроса)')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.TextField(verbose_name="Текст вопроса")),
+                (
+                    "image",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="account.image",
+                        verbose_name="Внешний ключ на таблицу image(изображение)",
+                    ),
+                ),
+                (
+                    "quiz_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="quize.quiz",
+                        verbose_name="Внешний ключ на quiz_quiz (викторина)",
+                    ),
+                ),
+                (
+                    "topic",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="quize.quiztopic",
+                        verbose_name="Внешний ключ на quiz_topic (Тема вопроса)",
+                    ),
+                ),
             ],
         ),
     ]
