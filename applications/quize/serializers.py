@@ -78,7 +78,11 @@ class QuizSerializer(serializers.ModelSerializer):
 
         if request and request.method == 'GET' and pk is not None:
             quiz_size = request.GET.get('quiz_size', 10)
-            questions = obj.quizquestion_set.all()[:int(quiz_size)]
+            is_randoom = request.GET.get('is_randoom', None)
+            if is_randoom:
+                questions = obj.quizquestion_set.all().order_by("?")[:int(quiz_size)]
+            else:
+                questions = obj.quizquestion_set.all()[:int(quiz_size)]
             return QuizQuestionSerializer(questions, many=True).data
 
 

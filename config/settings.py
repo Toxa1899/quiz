@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -129,8 +130,17 @@ USE_TZ = True
 
 
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000'
+# CORS_ALLOWED_ORIGINS = [
+#     'http://ort-test.kg',
+#     'https://ce7c-185-53-228-200.ngrok-free.app'
+# ]
+#
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+from corsheaders.defaults import default_headers
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'ngrok-skip-browser-warning',
 ]
 
 

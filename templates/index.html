@@ -1,52 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Login Example</title>
 </head>
 <body>
+    <h1>Login via Telegram</h1>
 
-<!-- <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="telereversbot" data-size="large" data-auth-url="https://honest-aliens-deny.loca.lt/api/v1/user/user/" data-request-access="write"></script> -->
+    <script async src="https://telegram.org/js/telegram-widget.js?22"
+        data-telegram-login="telereversbot"
+        data-size="large"
+        data-onauth="onTelegramAuth(user)"
+        data-request-access="write">
+    </script>
 
 
-<script async src="https://telegram.org/js/telegram-widget.js?22"
-    data-telegram-login="telereversbot"
-    data-size="large"
-    data-auth-url="https://dark-pans-remain.loca.lt/api/v1/user/user/"
-    data-request-access="write"
-    data-onauth="onTelegramAuth">
-</script>
+    <div>
+        <h4 id="token" style="overflow-wrap: break-word">
 
-<script>
-  // Функция, вызываемая после авторизации
-  function onTelegramAuth(user) {
-    console.log('Telegram User:', user);
+        </h4>
+    </div>
 
-    // Пример: Отправка данных пользователя на сервер через fetch
-    fetch('https://dark-pans-remain.loca.lt/api/v1/user/user/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Ошибка при авторизации');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Успешная авторизация:', data);
-      })
-      .catch((error) => {
-        console.error('Ошибка:', error);
-      });
-  }
-</script>
+
+
+    <script type="text/javascript">
+
+
+
+
+      function onTelegramAuth(user) {
+        const userData = {
+          id: user.id,
+          first_name: user.first_name,
+          username: user.username || '',
+          photo_url: user.photo_url || '',
+          auth_date : user.auth_date || '',
+          hash : user.hash || '',
+
+
+        };
+
+        console.log(userData)
+
+
+        fetch('https://eb31-185-53-228-200.ngrok-free.app/api/v1/user/user/', {
+          method: 'POST',
+          headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true',
+          },
+          body: JSON.stringify(userData),
+        })
+
+
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+          console.log('Success:', data);
+
+          document.getElementById('token').textContent = JSON.stringify(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to send user data.');
+        });
+      }
+    </script>
+
 
 
 
