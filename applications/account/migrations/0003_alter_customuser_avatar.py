@@ -7,7 +7,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("account", "0002_image_delete_imageuser_alter_customuser_language_and_more"),
+        (
+            "account",
+            "0002_image_delete_imageuser_alter_customuser_language_and_more",
+        ),
     ]
 
     operations = [

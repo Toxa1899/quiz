@@ -17,3 +17,4 @@ black
 isort
 flake8
 gunicorn
+django-jazzmin

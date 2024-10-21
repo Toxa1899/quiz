@@ -1,88 +1,80 @@
-import hashlib
-import hmac
+import logging
 
-from decouple import config
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
-from django.shortcuts import render
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+
+
+from .serializers import (
+    ChangePasswordSerializers,
+    DeleteAccountSerializer,
+    RegisterSerializers,
+)
+
 
 User = get_user_model()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-BOT_TOKEN = config("BOT_TOKEN")
+class RegisterAPIView(APIView):
+
+    def post(self, request):
+        serializers = RegisterSerializers(data=request.data)
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+
+        logger.info(
+            f"зарегистрирован новый  пользователь '{serializers.validated_data.get('email')}'"
+        )
+        return Response("Вы успешно зарегистрировались", status=201)
 
 
-def check_telegram_authorization(auth_data):
-    # Извлекаем хэш и удаляем его из данных
-    check_hash = auth_data.pop("hash", None)
+class DeleteAccountAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    # Генерация строки проверки
-    data_check_arr = [f"{key}={value}" for key, value in auth_data.items() if value]
-    data_check_arr.sort()  # Сортировка
-    data_check_string = "\n".join(data_check_arr)
+    def delete(self, request):
+        user = request.user
+        serializer = DeleteAccountSerializer(data=request.data)
 
-    # Генерация секретного ключа
-    secret_key = hashlib.sha256(BOT_TOKEN.encode()).digest()
+        if serializer.is_valid():
+            deletion_password = serializer.validated_data.get("password")
 
-    # Генерация HMAC
-    hash_value = hmac.new(
-        secret_key, data_check_string.encode(), hashlib.sha256
-    ).digest()
-
-    # Сравнение хэшей
-    if not hmac.compare_digest(hash_value, bytes.fromhex(check_hash)):
-        return "Data is NOT from Telegram"
-
-    user, created = User.objects.get_or_create(
-        tg_id=auth_data["id"],
-        defaults={
-            "tg_id": auth_data["id"],
-            "username": auth_data["username"],
-            "password": make_password(check_hash),
-            "is_active": True
-        },
-    )
-
-    refresh = RefreshToken.for_user(user)
-    access_token = str(refresh.access_token)
-    refresh_token = str(refresh)
-
-    # Возврат токенов
-    return {"access": access_token, "refresh": refresh_token}
-
-    # return 'success'
+            if deletion_password and user.check_password(deletion_password):
+                user.delete()
+                logger.info(
+                    f"Аккаунт пользователя '{request.user.email}' был успешно удален"
+                )
+                return Response(
+                    "Аккаунт успешно удален.",
+                    status=status.HTTP_204_NO_CONTENT,
+                )
+            else:
+                logger.info(
+                    f"Неверный пароль для удаления аккаунта '{request.user.email}' "
+                )
+                return Response(
+                    "Неверный пароль для удаления аккаунта.",
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
-class TelegramLoginView(APIView):
+class ChangePasswordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        tg = check_telegram_authorization(data)
-        print(tg)
-
-        return Response(tg)
-
-    def get(self, request, *args, **kwargs):
-        data_get = request.GET
-
-        if data_get:
-            data = {
-                "id": data_get["id"],
-                "first_name": data_get["first_name"],
-                "username": data_get["username"],
-                "photo_url": data_get["photo_url"],
-                "auth_date": data_get["auth_date"],
-                "hash": data_get["hash"],
-            }
-
-            tg = check_telegram_authorization(data)
-
-            return Response(tg)
-        return  Response('no Data')
-
-def tg(requests):
-    return render(requests, "index.html")
+    def post(self, request):
+        serializers = ChangePasswordSerializers(
+            data=request.data, context={"request": request}
+        )
+        serializers.is_valid(raise_exception=True)
+        serializers.set_new_password()
+        logger.info(
+            f"Пароль пользователя '{request.user.email}' был успешно изменён"
+        )
+        return Response("Вы успешно сменили пароль", status=200)

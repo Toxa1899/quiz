@@ -14,7 +14,7 @@ import os
 from datetime import timedelta
 from email.policy import default
 from pathlib import Path
-
+from corsheaders.defaults import default_headers
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,6 +36,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -136,7 +137,6 @@ USE_TZ = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-from corsheaders.defaults import default_headers
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "ngrok-skip-browser-warning",
@@ -147,7 +147,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 }
@@ -177,4 +179,6 @@ AUTH_USER_MODEL = "account.CustomUser"
 
 TELEGRAM_BOT_NAME = "telereversbot"
 TELEGRAM_BOT_TOKEN = "6625369761:AAE1TKu6tVr3eg6qQjDLWQBFCpGEz-1CGyM"
-TELEGRAM_LOGIN_REDIRECT_URL = "https://early-mice-draw.loca.lt/api/v1/user/user/"
+TELEGRAM_LOGIN_REDIRECT_URL = (
+    "https://early-mice-draw.loca.lt/api/v1/user/user/"
+)

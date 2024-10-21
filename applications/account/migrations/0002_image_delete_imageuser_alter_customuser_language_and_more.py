@@ -32,7 +32,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "updated_at",
-                    models.DateTimeField(auto_now=True, verbose_name="Дата обновления"),
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Дата обновления"
+                    ),
                 ),
             ],
         ),

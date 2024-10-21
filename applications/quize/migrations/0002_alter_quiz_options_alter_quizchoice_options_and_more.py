@@ -12,7 +12,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name="quiz",
-            options={"verbose_name": "Викторина", "verbose_name_plural": "Викторины"},
+            options={
+                "verbose_name": "Викторина",
+                "verbose_name_plural": "Викторины",
+            },
         ),
         migrations.AlterModelOptions(
             name="quizchoice",
@@ -23,7 +26,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name="quizquestion",
-            options={"verbose_name": "Вопросы", "verbose_name_plural": "Вопросы"},
+            options={
+                "verbose_name": "Вопросы",
+                "verbose_name_plural": "Вопросы",
+            },
         ),
         migrations.AlterModelOptions(
             name="quizresult",

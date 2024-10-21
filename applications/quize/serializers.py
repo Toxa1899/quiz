@@ -83,7 +83,9 @@ class QuizSerializer(serializers.ModelSerializer):
             quiz_size = request.GET.get("quiz_size", 10)
             is_randoom = request.GET.get("is_randoom", None)
             if is_randoom:
-                questions = obj.quizquestion_set.all().order_by("?")[: int(quiz_size)]
+                questions = obj.quizquestion_set.all().order_by("?")[
+                    : int(quiz_size)
+                ]
             else:
                 questions = obj.quizquestion_set.all()[: int(quiz_size)]
             return QuizQuestionSerializer(questions, many=True).data

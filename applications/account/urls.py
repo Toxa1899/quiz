@@ -1,16 +1,24 @@
-from ast import parse
-
-from django.conf import settings
-from django.conf.urls.static import static
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
-from applications.account import views
-from applications.account.views import TelegramLoginView, tg
+from .views import ChangePasswordAPIView, DeleteAccountAPIView, RegisterAPIView
+
 
 urlpatterns = [
-    path("user/", TelegramLoginView.as_view()),
-    path("tg/", views.tg),
-    # path('index', views.index),
-    # path('callback', views.callback),
-    # path('redirect', views.redirect),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("register/", RegisterAPIView.as_view(), name="register"),
+    path("login/", TokenObtainPairView.as_view(), name="login"),
+    path(
+        "change_password/",
+        ChangePasswordAPIView.as_view(),
+        name="change_password",
+    ),
+    path("refresh", TokenRefreshView.as_view()),
+    path(
+        "delete/",
+        DeleteAccountAPIView.as_view(),
+        name="delete-account",
+    ),
+]

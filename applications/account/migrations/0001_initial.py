@@ -37,7 +37,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "updated_at",
-                    models.DateTimeField(auto_now=True, verbose_name="Дата обновления"),
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Дата обновления"
+                    ),
                 ),
             ],
         ),
@@ -53,7 +55,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "password",
+                    models.CharField(max_length=128, verbose_name="password"),
+                ),
                 (
                     "last_login",
                     models.DateTimeField(
@@ -98,7 +103,9 @@ class Migration(migrations.Migration):
                 (
                     "email",
                     models.EmailField(
-                        blank=True, max_length=254, verbose_name="email address"
+                        blank=True,
+                        max_length=254,
+                        verbose_name="email address",
                     ),
                 ),
                 (
@@ -112,10 +119,14 @@ class Migration(migrations.Migration):
                 (
                     "date_joined",
                     models.DateTimeField(
-                        default=django.utils.timezone.now, verbose_name="date joined"
+                        default=django.utils.timezone.now,
+                        verbose_name="date joined",
                     ),
                 ),
-                ("activation_code", models.CharField(blank=True, max_length=60)),
+                (
+                    "activation_code",
+                    models.CharField(blank=True, max_length=60),
+                ),
                 ("is_active", models.BooleanField(default=False)),
                 ("tg_id", models.IntegerField(unique=True)),
                 (
@@ -126,17 +137,24 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "updated_at",
-                    models.DateTimeField(auto_now=True, verbose_name="Дата обновления"),
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Дата обновления"
+                    ),
                 ),
                 (
                     "city_or_village",
                     models.CharField(blank=True, max_length=200, null=True),
                 ),
-                ("school", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "school",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
                 (
                     "language",
                     models.CharField(
-                        choices=[("ru", "ru"), ("kg", "kg")], default="ru", max_length=2
+                        choices=[("ru", "ru"), ("kg", "kg")],
+                        default="ru",
+                        max_length=2,
                     ),
                 ),
                 (

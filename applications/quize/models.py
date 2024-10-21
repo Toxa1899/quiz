@@ -3,13 +3,16 @@ from django.db import models
 
 from applications.account.models import Image
 
-# Create your models here.
+
 User = get_user_model()
 
 
 class QuizType(models.Model):
     name = models.CharField(
-        max_length=100, blank=True, null=True, verbose_name="Название типа викторины"
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Название типа викторины",
     )
 
     def __str__(self):
@@ -61,7 +64,8 @@ class QuizTopic(models.Model):
         verbose_name="Внешний ключ на таблицу quiz_quiz (викторина)",
     )
     name = models.CharField(
-        max_length=200, verbose_name='Название темы (например, "Математика", "История")'
+        max_length=200,
+        verbose_name='Название темы (например, "Математика", "История")',
     )
 
     def __str__(self):
@@ -115,7 +119,8 @@ class QuizChoice(models.Model):
         Image,
         on_delete=models.CASCADE,
         verbose_name="Внешний ключ на quiz_image (изображение) — необязательное поле",
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
 
     class Meta:
@@ -128,7 +133,9 @@ class QuizChoice(models.Model):
 
 class QuizResult(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Внешний ключ на пользователя"
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Внешний ключ на пользователя",
     )
     quiz = models.ForeignKey(
         Quiz,
@@ -136,7 +143,9 @@ class QuizResult(models.Model):
         verbose_name="Внешний ключ на quiz_quiz (викторина)",
     )
     score = models.IntegerField(verbose_name="Количество набранных баллов")
-    date_taken = models.DateTimeField("Дата прохождения викторины", auto_now_add=True)
+    date_taken = models.DateTimeField(
+        "Дата прохождения викторины", auto_now_add=True
+    )
 
     class Meta:
         verbose_name = "Результаты тестов"

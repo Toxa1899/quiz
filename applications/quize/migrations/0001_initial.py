@@ -10,7 +10,10 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("account", "0002_image_delete_imageuser_alter_customuser_language_and_more"),
+        (
+            "account",
+            "0002_image_delete_imageuser_alter_customuser_language_and_more",
+        ),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -52,9 +55,14 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "title",
-                    models.CharField(max_length=50, verbose_name="Название викторины"),
+                    models.CharField(
+                        max_length=50, verbose_name="Название викторины"
+                    ),
                 ),
-                ("description", models.TextField(verbose_name="Описание викторины")),
+                (
+                    "description",
+                    models.TextField(verbose_name="Описание викторины"),
+                ),
                 (
                     "created_at",
                     models.DateTimeField(
@@ -63,7 +71,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "updated_at",
-                    models.DateTimeField(auto_now=True, verbose_name="Дата обновления"),
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Дата обновления"
+                    ),
                 ),
                 (
                     "is_published",
@@ -114,7 +124,8 @@ class Migration(migrations.Migration):
                 (
                     "is_correct",
                     models.BooleanField(
-                        default=False, verbose_name="Является ли ответ правильным"
+                        default=False,
+                        verbose_name="Является ли ответ правильным",
                     ),
                 ),
                 (
@@ -149,12 +160,15 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "score",
-                    models.IntegerField(verbose_name="Количество набранных баллов"),
+                    models.IntegerField(
+                        verbose_name="Количество набранных баллов"
+                    ),
                 ),
                 (
                     "date_taken",
                     models.DateTimeField(
-                        auto_now_add=True, verbose_name="Дата прохождения викторины"
+                        auto_now_add=True,
+                        verbose_name="Дата прохождения викторины",
                     ),
                 ),
                 (
