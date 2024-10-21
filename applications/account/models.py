@@ -45,7 +45,7 @@ class CustomUserManager(UserManager):
 class CustomUser(AbstractUser):
     language_choices = (("ru", "ru"), ("kg", "kg"), ("en", "en"))
 
-    activation_code = models.CharField(max_length=60, blank=True)
+    # activation_code = models.CharField(max_length=60, blank=True)
     is_active = models.BooleanField(default=False)
     tg_id = models.IntegerField(unique=True)
     created_at = models.DateTimeField("Дата создания", auto_now_add=True)
