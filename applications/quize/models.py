@@ -50,7 +50,7 @@ class Quiz(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return f"{str(self.title)} {str(self.language)}"
 
     class Meta:
         verbose_name = "Викторина"
