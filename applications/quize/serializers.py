@@ -10,6 +10,14 @@ from applications.quize.models import (
     QuizType,
 )
 
+from applications.account.serializers import UserSerializer
+
+
+class QuizTopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizTopic
+        fields = "__all__"
+
 
 class QuizTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +54,7 @@ class QuizChoiceSerializer(ImageSerializerMixin):
 
 class QuizQuestionSerializer(ImageSerializerMixin):
     choices = QuizChoiceSerializer(many=True)
+    topic = QuizTopicSerializer()
 
     class Meta:
         model = QuizQuestion
@@ -106,13 +115,9 @@ class QuizSerializer(serializers.ModelSerializer):
         return quiz
 
 
-class QuizTopicSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = QuizTopic
-        fields = "__all__"
-
-
 class QuizResultSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+
     class Meta:
         model = QuizResult
         fields = "__all__"

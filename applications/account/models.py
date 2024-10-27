@@ -61,7 +61,14 @@ class CustomUserManager(UserManager):
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     username = None
-
+    img = models.ForeignKey(
+        Image,
+        verbose_name="ава",
+        related_name="user_img",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     objects = CustomUserManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

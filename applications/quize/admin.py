@@ -6,6 +6,7 @@ from applications.quize.models import (
     QuizQuestion,
     QuizTopic,
     QuizType,
+    QuizResult,
 )
 
 
@@ -29,3 +30,4 @@ class QuizAdminModel(admin.ModelAdmin):
 admin.site.register(QuizTopic)
 # admin.site.register(QuizChoice)
 admin.site.register(QuizType)
+admin.site.register(QuizResult)
