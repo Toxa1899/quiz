@@ -42,9 +42,7 @@ class RegisterSerializers(serializers.ModelSerializer):
 
 
 class DeleteAccountSerializer(serializers.Serializer):
-    password = serializers.CharField(
-        min_length=6, required=True, write_only=True
-    )
+    password = serializers.CharField(required=True, write_only=True)
 
 
 class ChangePasswordSerializers(serializers.Serializer):
