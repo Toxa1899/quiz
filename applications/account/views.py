@@ -5,12 +5,13 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework import viewsets, mixins
 
 from .serializers import (
     ChangePasswordSerializers,
     DeleteAccountSerializer,
     RegisterSerializers,
+    UserSerializer,
 )
 
 
@@ -78,3 +79,19 @@ class ChangePasswordAPIView(APIView):
             f"Пароль пользователя '{request.user.email}' был успешно изменён"
         )
         return Response("Вы успешно сменили пароль", status=200)
+
+
+class UserModelViewSet(
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+
+    permission_classes = [IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return self.queryset.filter(id=user.id)

@@ -96,7 +96,6 @@ class ChangePasswordSerializers(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CustomUser
         fields = [

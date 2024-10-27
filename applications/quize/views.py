@@ -124,3 +124,6 @@ class QuizResultModelViewSet(viewsets.ModelViewSet):
         result = QuizResult.objects.all()[:size]
         serializer = QuizResultSerializer(result, many=True)
         return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
