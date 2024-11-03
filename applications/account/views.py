@@ -7,11 +7,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets, mixins
 
+from .models import Image
 from .serializers import (
     ChangePasswordSerializers,
     DeleteAccountSerializer,
     RegisterSerializers,
     UserSerializer,
+    ImageSerializer,
+    ForgotPasswordSerializers,
+    ForgotPasswordConfirmSerializers
 )
 
 
@@ -95,3 +99,26 @@ class UserModelViewSet(
     def get_queryset(self):
         user = self.request.user
         return self.queryset.filter(id=user.id)
+
+
+
+class ImageModelViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+
+
+class ForgotPasswordAPIView(APIView):
+
+    def post(self, request):
+        serializer = ForgotPasswordSerializers(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.send_code()
+        return Response('Вам отправлено письмо с кодом для восстановления пароля', status=200)
+
+
+class ForgotPasswordConfirmAPIView(APIView):
+    def post(self, request):
+        serializer = ForgotPasswordConfirmSerializers(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.set_new_password()
+        return Response('Ваш пароль успешно обновлен', status=200)

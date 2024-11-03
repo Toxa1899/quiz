@@ -11,7 +11,9 @@ from applications.quize.models import (
 )
 
 from applications.account.serializers import UserSerializer
+from  rest_framework.authentication import get_user_model
 
+User = get_user_model()
 
 class QuizTopicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -121,3 +123,5 @@ class QuizResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuizResult
         fields = "__all__"
+
+

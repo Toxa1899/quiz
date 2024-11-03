@@ -18,3 +18,4 @@ isort
 flake8
 gunicorn
 django-jazzmin
+celery

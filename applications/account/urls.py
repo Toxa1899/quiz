@@ -9,11 +9,15 @@ from .views import (
     DeleteAccountAPIView,
     RegisterAPIView,
     UserModelViewSet,
+    ImageModelViewSet,
+    ForgotPasswordAPIView,
+    ForgotPasswordConfirmAPIView
 )
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register("its-me", UserModelViewSet)
+router.register("image", ImageModelViewSet)
 
 
 urlpatterns = [
@@ -32,4 +36,6 @@ urlpatterns = [
         DeleteAccountAPIView.as_view(),
         name="delete-account",
     ),
+    path('forgot_password/', ForgotPasswordAPIView.as_view()),
+    path('forgot_password_confirm/', ForgotPasswordConfirmAPIView.as_view()),
 ]

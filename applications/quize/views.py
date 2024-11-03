@@ -1,13 +1,14 @@
-from django.shortcuts import render
+from django.contrib.admin.templatetags.admin_list import pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.permissions import (
-    AllowAny,
+
     IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
+
     DjangoModelPermissionsOrAnonReadOnly,
 )
 from rest_framework.response import Response
+from urllib3 import request
 
 from applications.quize.models import (
     Quiz,
@@ -22,17 +23,16 @@ from applications.quize.serializers import (
     QuizResultSerializer,
     QuizSerializer,
     QuizTopicSerializer,
+
 )
-from django.utils.decorators import method_decorator
+
 
 
 from django_filters import rest_framework as filters
-from .decorators import rating_schema
-from rest_framework import status
-from rest_framework.decorators import action
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
+
+from drf_yasg import openapi
+from .permissions import IsAuthorOrReadOnly
 
 class QuizFilter(filters.FilterSet):
     type = filters.CharFilter(field_name="type__name")
@@ -51,16 +51,6 @@ class QuizeModelViewSet(viewsets.ModelViewSet):
     serializer_class = QuizSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = QuizFilter
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-
-    #     quiz_type = self.request.query_params.get("type")
-
-    #     if quiz_type:
-    #         queryset = queryset.filter(type__name=quiz_type)
-
-    #     return queryset
 
 
 class QuizeQuestionModelViewSet(viewsets.ModelViewSet):
@@ -99,31 +89,44 @@ params = [
     )
 ]
 
+class QuizResultFilter(filters.FilterSet):
+    size = filters.NumberFilter(field_name='page_size', method='filter_by_page_size')
 
-@method_decorator(
-    name="list", decorator=swagger_auto_schema(manual_parameters=params)
-)
+    class Meta:
+        model = QuizResult
+        fields = ['quiz__id']
+
+    def filter_by_page_size(self, queryset, name, value):
+        return queryset[:value]
+
+# @method_decorator(
+#     name="list", decorator=swagger_auto_schema(manual_parameters=params)
+# )
 class QuizResultModelViewSet(viewsets.ModelViewSet):
     permission_classes = [
-        DjangoModelPermissionsOrAnonReadOnly,
         IsAuthenticated,
+        IsAuthorOrReadOnly
     ]
     queryset = QuizResult.objects.all()
     serializer_class = QuizResultSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = QuizResultFilter
 
-    def list(self, request):
-        """
-        size -- количество результатов
-        """
-        query_params = self.request.query_params
-        size = (
-            int(query_params.get("size", None))
-            if query_params.get("size", None)
-            else None
-        )
-        result = QuizResult.objects.all()[:size]
-        serializer = QuizResultSerializer(result, many=True)
-        return Response(serializer.data)
+
+
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(user=self.request.user)
+        page_size = self.request.query_params.get('page_size', None)
+        if page_size:
+            queryset = queryset[:int(page_size)]
+        return queryset
+
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+
+
+
+
