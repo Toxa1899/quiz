@@ -116,9 +116,10 @@ class QuizResultModelViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(user=self.request.user)
-        page_size = self.request.query_params.get('page_size', None)
-        if page_size:
-            queryset = queryset[:int(page_size)]
+        # page_size = self.request.query_params.get('size', None)
+        # print(self.request.query_params)
+        # if page_size:
+        #     queryset = queryset[:int(page_size)]
         return queryset
 
 
