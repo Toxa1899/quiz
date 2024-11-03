@@ -90,7 +90,7 @@ params = [
 ]
 
 class QuizResultFilter(filters.FilterSet):
-    size = filters.NumberFilter(field_name='page_size', method='filter_by_page_size')
+    size = filters.NumberFilter(field_name='size', method='filter_by_page_size')
 
     class Meta:
         model = QuizResult
