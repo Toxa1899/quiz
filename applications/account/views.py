@@ -52,8 +52,8 @@ class DeleteAccountAPIView(APIView):
                     f"Аккаунт пользователя '{request.user.email}' был успешно удален"
                 )
                 return Response(
-                    "Аккаунт успешно удален.",
-                    status=status.HTTP_204_NO_CONTENT,
+                    "Аккаунт успешно удален",
+                    status=200,
                 )
             else:
                 logger.info(
