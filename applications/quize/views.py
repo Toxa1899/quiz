@@ -1,10 +1,11 @@
 from django.contrib.admin.templatetags.admin_list import pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+
 from rest_framework.permissions import (
 
     IsAuthenticated,
-
+    IsAuthenticatedOrReadOnly,
     DjangoModelPermissionsOrAnonReadOnly,
 )
 from rest_framework.response import Response
@@ -45,7 +46,7 @@ class QuizFilter(filters.FilterSet):
 class QuizeModelViewSet(viewsets.ModelViewSet):
     permission_classes = [
         DjangoModelPermissionsOrAnonReadOnly,
-        IsAuthenticated,
+        IsAuthenticatedOrReadOnly,
     ]
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer

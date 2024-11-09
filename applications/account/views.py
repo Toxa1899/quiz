@@ -46,7 +46,6 @@ class DeleteAccountAPIView(APIView):
 
         if serializer.is_valid():
             deletion_password = serializer.validated_data.get("password")
-
             if deletion_password and user.check_password(deletion_password):
                 user.delete()
                 logger.info(
