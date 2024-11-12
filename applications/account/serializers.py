@@ -93,7 +93,18 @@ class ChangePasswordSerializers(serializers.Serializer):
         logger.info(f"Пароль для пользователя '{user.email}' был изменён")
 
 
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
+
 class UserSerializer(serializers.ModelSerializer):
+    img_data = ImageSerializer(
+            source="img", read_only=True
+        )
+
     class Meta:
         model = CustomUser
         fields = [
@@ -103,14 +114,9 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "img",
             "email",
+            "img_data"
+            
         ]
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = '__all__'
-
-
 
 class ForgotPasswordSerializers(serializers.Serializer):
     email = serializers.EmailField(required=True)
