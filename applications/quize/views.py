@@ -1,9 +1,9 @@
 from django.contrib.admin.templatetags.admin_list import pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-
+from rest_framework.views import APIView
 from rest_framework.permissions import (
-
+    AllowAny,
     IsAuthenticated,
     IsAuthenticatedOrReadOnly,
     DjangoModelPermissionsOrAnonReadOnly,
@@ -26,9 +26,9 @@ from applications.quize.serializers import (
     QuizTopicSerializer,
 
 )
+from django.db.models import Max
 
-
-
+from django.db.models import OuterRef, Subquery
 from django_filters import rest_framework as filters
 
 
@@ -100,6 +100,9 @@ class QuizResultFilter(filters.FilterSet):
     def filter_by_page_size(self, queryset, name, value):
         return queryset[:value]
 
+
+
+
 # @method_decorator(
 #     name="list", decorator=swagger_auto_schema(manual_parameters=params)
 # )
@@ -132,3 +135,14 @@ class QuizResultModelViewSet(viewsets.ModelViewSet):
 
 
 
+
+class QuizResulAlltAPIView(APIView):
+
+    def get(self, request):
+        max_scores = QuizResult.objects.values('user_id').annotate(max_score=Max('score')).values('max_score')
+
+        queryset = QuizResult.objects.filter(
+            score=Subquery(max_scores.filter(user_id=OuterRef('user_id')))
+        )
+        serializer = QuizResultSerializer(queryset, many=True)
+        return Response(serializer.data)

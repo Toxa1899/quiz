@@ -7,6 +7,7 @@ from .views import (
     QuizeQuestionModelViewSet,
     QuizeTopicModelViewSet,
     QuizResultModelViewSet,
+    QuizResulAlltAPIView
 )
 
 router = DefaultRouter()
@@ -15,11 +16,14 @@ router.register("topic", QuizeTopicModelViewSet)
 router.register("choise", QuizeChoiceModelViewSet)
 router.register("result", QuizResultModelViewSet)
 
+
 router.register("", QuizeModelViewSet)
 
 
 urlpatterns = [
+    path("result/all/", QuizResulAlltAPIView.as_view()),
     path("", include(router.urls)),
+    
 ]
 
 # urlpatterns += router.urls
