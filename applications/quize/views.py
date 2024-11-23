@@ -30,7 +30,7 @@ from django.db.models import Max
 
 from django.db.models import OuterRef, Subquery
 from django_filters import rest_framework as filters
-
+from django.db.models import Q
 
 from drf_yasg import openapi
 from .permissions import IsAuthorOrReadOnly
@@ -120,10 +120,6 @@ class QuizResultModelViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(user=self.request.user)
-        # page_size = self.request.query_params.get('size', None)
-        # print(self.request.query_params)
-        # if page_size:
-        #     queryset = queryset[:int(page_size)]
         return queryset
 
 
@@ -136,13 +132,22 @@ class QuizResultModelViewSet(viewsets.ModelViewSet):
 
 
 
-class QuizResulAlltAPIView(APIView):
-
+class QuizResulAlltAPIView(APIView):    
     def get(self, request):
-        max_scores = QuizResult.objects.values('user_id').annotate(max_score=Max('score')).values('max_score')
+        get_data = request.query_params
+        
+        q = {}
+        if 'quiz_id' in get_data:
+            q.update({'quiz__id': get_data.get('quiz_id')})
+        
 
+
+        max_scores = QuizResult.objects.values('user_id').annotate(max_score=Max('score')).values('max_score')
         queryset = QuizResult.objects.filter(
-            score=Subquery(max_scores.filter(user_id=OuterRef('user_id')))
-        )
+            score=Subquery(max_scores.filter(user_id=OuterRef('user_id'))) , **q
+
+        )[:int(get_data.get('size', 10))]
+        
         serializer = QuizResultSerializer(queryset, many=True)
+      
         return Response(serializer.data)

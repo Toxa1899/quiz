@@ -156,7 +156,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=500),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+   
 }
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
